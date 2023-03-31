@@ -1,5 +1,8 @@
 package com.bridgelabz.employeewageproblem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 interface IComputeEmpWage {
 	public void addCompanyEmpWage(String company, int wagePerHour, int totalWorkingDays, int maxWorkingHour);
 
@@ -9,17 +12,17 @@ interface IComputeEmpWage {
 }
 
 public class EmpWageBuilder implements IComputeEmpWage {
-	private final CompanyEmpWage[] companyEmpWages;
+	private final List<CompanyEmpWage> companyEmpWages;
 	private int numOfCompanies;
 
 	public EmpWageBuilder() {
-		companyEmpWages = new CompanyEmpWage[5];
+		companyEmpWages = new ArrayList<>();
 		numOfCompanies = 0;
 	}
 
 	@Override
 	public void addCompanyEmpWage(String company, int wagePerHour, int totalWorkingDays, int maxWorkingHour) {
-		companyEmpWages[numOfCompanies] = new CompanyEmpWage(company, wagePerHour, totalWorkingDays, maxWorkingHour);
+		companyEmpWages.add(new CompanyEmpWage(company, wagePerHour, totalWorkingDays, maxWorkingHour));
 		numOfCompanies++;
 	}
 
@@ -28,8 +31,8 @@ public class EmpWageBuilder implements IComputeEmpWage {
 		for (int i = 0; i < numOfCompanies; i++) {
 			int day = 1;
 			int totalWorkHour = 0;
-			while (day <= companyEmpWages[i].getTotalWorkingDays()
-					&& totalWorkHour <= companyEmpWages[i].getMaxWorkingHour()) {
+			while (day <= companyEmpWages.get(i).getTotalWorkingDays()
+					&& totalWorkHour <= companyEmpWages.get(i).getMaxWorkingHour()) {
 				int empCheck = Math.floor(Math.random() * 10) % 2 == 1 ? 1 : 0;
 				int dayHour = Math.floor(Math.random() * 10) % 2 == 0 ? 4 : 8;
 				switch (empCheck) {
@@ -45,16 +48,16 @@ public class EmpWageBuilder implements IComputeEmpWage {
 				}
 				day++;
 			}
-			int totalWage = totalWorkHour * companyEmpWages[i].getWagePerHour();
-			companyEmpWages[i].setTotalWage(totalWage);
+			int totalWage = totalWorkHour * companyEmpWages.get(i).getWagePerHour();
+			companyEmpWages.get(i).setTotalWage(totalWage);
 		}
 	}
 
 	@Override
 	public void printTotalWage() {
 		for (int i = 0; i < numOfCompanies; i++) {
-			System.out.println(
-					"Total salary for " + companyEmpWages[i].getCompany() + ": $" + companyEmpWages[i].getTotalWage());
+			System.out.println("Total salary for " + companyEmpWages.get(i).getCompany() + ": $"
+					+ companyEmpWages.get(i).getTotalWage());
 		}
 	}
 
