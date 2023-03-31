@@ -1,23 +1,29 @@
 package com.bridgelabz.employeewageproblem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 interface IComputeEmpWage {
-	void addCompanyEmpWage(String company, int wagePerHour, int totalWorkingDays, int maxWorkingHour);
+	public void addCompanyEmpWage(String company, int wagePerHour, int totalWorkingDays, int maxWorkingHour);
 
-	void calculateTotalWage();
+	public void calculateTotalWage();
 
-	void printTotalWage();
+	public void printTotalWage();
+
+	public int getTotalWageByCompany(String company);
 }
 
 public class EmpWageBuilder implements IComputeEmpWage {
 	private final List<CompanyEmpWage> companyEmpWages;
 	private int numOfCompanies;
+	private final Map<String, Integer> companyWageMap;
 
 	public EmpWageBuilder() {
 		companyEmpWages = new ArrayList<>();
 		numOfCompanies = 0;
+		companyWageMap = new HashMap<>();
 	}
 
 	@Override
@@ -33,8 +39,8 @@ public class EmpWageBuilder implements IComputeEmpWage {
 			int totalWorkHour = 0;
 			while (day <= companyEmpWages.get(i).getTotalWorkingDays()
 					&& totalWorkHour <= companyEmpWages.get(i).getMaxWorkingHour()) {
-				int empCheck = (int) Math.floor(Math.random() * 10) % 2;
-				int dayHour = (int) Math.floor(Math.random() * 10) % 2 == 0 ? 4 : 8;
+				int empCheck = Math.floor(Math.random() * 10) % 2 == 1 ? 1 : 0;
+				int dayHour = Math.floor(Math.random() * 10) % 2 == 0 ? 4 : 8;
 				switch (empCheck) {
 				case 1:
 					if (dayHour == 8) {
@@ -52,6 +58,7 @@ public class EmpWageBuilder implements IComputeEmpWage {
 			}
 			int totalWage = totalWorkHour * companyEmpWages.get(i).getWagePerHour();
 			companyEmpWages.get(i).setTotalWage(totalWage);
+			companyWageMap.put(companyEmpWages.get(i).getCompany(), totalWage);
 		}
 	}
 
@@ -60,8 +67,16 @@ public class EmpWageBuilder implements IComputeEmpWage {
 		for (int i = 0; i < numOfCompanies; i++) {
 			System.out.println("Total salary for " + companyEmpWages.get(i).getCompany() + ": $"
 					+ companyEmpWages.get(i).getTotalWage());
-			System.out.println("Daily wages for " + companyEmpWages.get(i).getCompany() + ": "
-					+ companyEmpWages.get(i).getDailyWages());
+		}
+	}
+
+	@Override
+	public int getTotalWageByCompany(String company) {
+		if (companyWageMap.containsKey(company)) {
+			return companyWageMap.get(company);
+		} else {
+			System.out.println("No data found for " + company);
+			return -1;
 		}
 	}
 
@@ -71,5 +86,10 @@ public class EmpWageBuilder implements IComputeEmpWage {
 		empWageBuilder.addCompanyEmpWage("Company 2", 25, 22, 120);
 		empWageBuilder.calculateTotalWage();
 		empWageBuilder.printTotalWage();
+
+		String company1 = "Company 1";
+		String company2 = "Company 2";
+		System.out.println("Total wage for " + company1 + ": $" + empWageBuilder.getTotalWageByCompany(company1));
+		System.out.println("Total wage for " + company2 + ": $" + empWageBuilder.getTotalWageByCompany(company2));
 	}
 }
