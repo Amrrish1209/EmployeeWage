@@ -1,6 +1,14 @@
 package com.bridgelabz.employeewageproblem;
 
-public class EmpWageBuilder {
+interface IComputeEmpWage {
+	public void addCompanyEmpWage(String company, int wagePerHour, int totalWorkingDays, int maxWorkingHour);
+
+	public void calculateTotalWage();
+
+	public void printTotalWage();
+}
+
+public class EmpWageBuilder implements IComputeEmpWage {
 	private final CompanyEmpWage[] companyEmpWages;
 	private int numOfCompanies;
 
@@ -9,11 +17,13 @@ public class EmpWageBuilder {
 		numOfCompanies = 0;
 	}
 
+	@Override
 	public void addCompanyEmpWage(String company, int wagePerHour, int totalWorkingDays, int maxWorkingHour) {
 		companyEmpWages[numOfCompanies] = new CompanyEmpWage(company, wagePerHour, totalWorkingDays, maxWorkingHour);
 		numOfCompanies++;
 	}
 
+	@Override
 	public void calculateTotalWage() {
 		for (int i = 0; i < numOfCompanies; i++) {
 			int day = 1;
@@ -40,6 +50,7 @@ public class EmpWageBuilder {
 		}
 	}
 
+	@Override
 	public void printTotalWage() {
 		for (int i = 0; i < numOfCompanies; i++) {
 			System.out.println(
@@ -52,5 +63,6 @@ public class EmpWageBuilder {
 		empWageBuilder.addCompanyEmpWage("Company 1", 20, 20, 100);
 		empWageBuilder.addCompanyEmpWage("Company 2", 25, 22, 120);
 		empWageBuilder.calculateTotalWage();
+		empWageBuilder.printTotalWage();
 	}
 }
