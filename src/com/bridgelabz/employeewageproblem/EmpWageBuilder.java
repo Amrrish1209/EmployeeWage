@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 interface IComputeEmpWage {
-	public void addCompanyEmpWage(String company, int wagePerHour, int totalWorkingDays, int maxWorkingHour);
+	void addCompanyEmpWage(String company, int wagePerHour, int totalWorkingDays, int maxWorkingHour);
 
-	public void calculateTotalWage();
+	void calculateTotalWage();
 
-	public void printTotalWage();
+	void printTotalWage();
 }
 
 public class EmpWageBuilder implements IComputeEmpWage {
@@ -33,8 +33,8 @@ public class EmpWageBuilder implements IComputeEmpWage {
 			int totalWorkHour = 0;
 			while (day <= companyEmpWages.get(i).getTotalWorkingDays()
 					&& totalWorkHour <= companyEmpWages.get(i).getMaxWorkingHour()) {
-				int empCheck = Math.floor(Math.random() * 10) % 2 == 1 ? 1 : 0;
-				int dayHour = Math.floor(Math.random() * 10) % 2 == 0 ? 4 : 8;
+				int empCheck = (int) Math.floor(Math.random() * 10) % 2;
+				int dayHour = (int) Math.floor(Math.random() * 10) % 2 == 0 ? 4 : 8;
 				switch (empCheck) {
 				case 1:
 					if (dayHour == 8) {
@@ -46,6 +46,8 @@ public class EmpWageBuilder implements IComputeEmpWage {
 				case 0:
 					break;
 				}
+				int dailyWage = dayHour * companyEmpWages.get(i).getWagePerHour();
+				companyEmpWages.get(i).addDailyWage(dailyWage);
 				day++;
 			}
 			int totalWage = totalWorkHour * companyEmpWages.get(i).getWagePerHour();
@@ -58,6 +60,8 @@ public class EmpWageBuilder implements IComputeEmpWage {
 		for (int i = 0; i < numOfCompanies; i++) {
 			System.out.println("Total salary for " + companyEmpWages.get(i).getCompany() + ": $"
 					+ companyEmpWages.get(i).getTotalWage());
+			System.out.println("Daily wages for " + companyEmpWages.get(i).getCompany() + ": "
+					+ companyEmpWages.get(i).getDailyWages());
 		}
 	}
 
